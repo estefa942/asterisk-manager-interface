@@ -1,0 +1,17 @@
+{
+  "name": "asterisk-manager-interface",
+  "version": "1.0.0",
+  "description": "Prueba AMI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "asterisk-ami": "^0.1.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6"
+  }
+}
