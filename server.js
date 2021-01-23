@@ -1,29 +1,23 @@
-const express = require("express");
-const asterikAmi = require("asterisk-ami");
-const app = express();
-const port = 3000;
+const AmiClient = require("asterisk-ami-client");
+let client = new AmiClient();
 
-const ami = new asterikAmi({
-  host: "192.168.30.71",
-  username: "admin",
-  password: "root",
-});
+client
+  .connect("admin", "root", { host: "192.168.30.71", port: 5038 })
+  .then((amiConnection) => {
+    client
+      .on("connect", () => console.log("connect"))
+      .on("event", (event) => console.log(event))
+      .on("data", (chunk) => console.log(chunk))
+      .on("response", (response) => console.log(response))
+      .on("disconnect", () => console.log("disconnect"))
+      .on("reconnection", () => console.log("reconnection"))
+      .on("internalError", (error) => console.log(error))
+      .action({
+        Action: "Ping",
+      });
 
-ami.on("ami_data", function (data) {
-  console.log("AMI DATA", data);
-  //decide between Events and non events here and what to do with them, maybe run an event emitter for the ones you care about
-});
-
-ami.connect(function () {
-  ami.send({ action: "Ping" }); //run a callback event when we have connected to the socket
-}); //connect creates a socket connection and sends the login action
-
-ami.send({ action: "Ping" });
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+    setTimeout(() => {
+      client.disconnect();
+    }, 5000);
+  })
+  .catch((error) => console.log(error));
