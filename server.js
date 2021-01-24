@@ -22,6 +22,12 @@ client
       .on("response", console.log)
       .action({
         Action: "Ping",
-      });
+      })
+      .action({
+        Action: "ExtensionState",
+        ActionID: "123",
+        Exten: "101",
+      })
+      .on("response", console.log);
   })
   .catch((error) => console.log(error));
